@@ -1,0 +1,29 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+
+  - name: Install EPEL and required packages
+    yum:
+      name: [epel-release,vim]
+      state: present
+  - name: Install Ansible
+    yum:
+      name: ansible
+      state: latest
+  - name: StrictHostKeyChecking off
+    lineinfile:
+      regexp: '^StrictHostKeyChecking'
+      line: 'StrictHostKeyChecking no'
+      path: /home/centos/.ssh/config
+      mode: 0600
+      owner: centos
+      group: centos
+      create: yes
+  - name: Copy classroom SSH key to instances
+    copy:
+      src: aws-kurs
+      dest: /home/centos/.ssh/id_rsa
+      mode: 0600
+      owner: centos
+      group: centos
