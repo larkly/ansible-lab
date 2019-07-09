@@ -70,7 +70,7 @@ resource "aws_key_pair" "ANSIBLE-KURS-KEYPAIR-1" {
   public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDMofp3C6RyZCr1NJd4hwCxppdyA4X2Al8imVNbZch30OfcH+A9IY2n5UYiKYRhID58x4T7tzQug+47t+GSDFZot4rKzoBFebQ/PthwHyfKBD18g8PCPiX6fzpoMvl4gANMlUD1bq8lk3rb3CtXZyehQ5SKQw10GQgXyj0ADHTky0ErUl3RLrQDnD6Ku0TBVEOSbexCplwpJf2Bjrob8qj04RIykHNYoddJ1X8W9VlUG9KSnZo0CScLjk0zzxs8kebh0E0gWeZPBUVwW5n0GnynFvGO0ANZVAQzo6cTGPkbA+3VrhOsW3HayRwgKTaSGh0j+pY/QH696MqUlEG5qSpsY0b3b8Pe3+Ap/P9tRRn6kFIVQo7rdXicsLSLGHVqA0exdF9zrXo+95pzOhNmVHD8r+nY34VHGQzD8plSy4y87oZt+O3b9MDg+ovjcl4+bYtCnQE5+gJHZ2nuVBkJpNelDKI6eoOnMDYRiDtjTk03UZ8/0TE21oMfeLfOm/bLETFfS7D5jsSW3JoXyAquBF30b0N6aZ/BT/XT4laOF9fChWlKSVc7RZ3Eu8KpPbxh5/ZXeQURosA9ECt5zwbHieaIHJep7iawST064JBunLZxD2b5SdY6v8zUskt+jPJTDkVx2HdJrlroTIpU5CUqDyEKIM8bB3BpjEm2khGn4EPp7w== TEMP AWS ANSIBLE KURS"
 }
 
-resource "aws_spot_instance_request" "ANSIBLE-KURS-EC2-BASTION" {
+resource "aws_spot_instance_request" "ANSIBLE-KURS-EC2-INSTANCE" {
     count = 4
     spot_price = 0.05
     wait_for_fulfillment = true
@@ -110,7 +110,7 @@ resource "aws_spot_instance_request" "ANSIBLE-KURS-EC2-BASTION" {
 }
 
 output "instance_ip_addr_public" {
-  value       = ["${aws_spot_instance_request.ANSIBLE-KURS-EC2-BASTION.*.public_dns}"]
+  value       = ["${aws_spot_instance_request.ANSIBLE-KURS-EC2-INSTANCE.*.public_dns}"]
   description = "Instance public IP"
 }
 
