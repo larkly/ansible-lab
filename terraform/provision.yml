@@ -1,9 +1,0 @@
----
-hosts: all
-become_root: yes
-tasks:
-
-- name: Configure EPEL
-  yum:
-    state: installed
-    name: epel-release
