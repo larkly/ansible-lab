@@ -11,4 +11,6 @@ before_script:
   - "ping -c1 www.vg.no"
 
 test:
-  script: "ping -c1 www.db.no"
+  script:
+  - "ping -c1 www.db.no"
+  - "echo $AWS_ACCESS_KEY_ID"
