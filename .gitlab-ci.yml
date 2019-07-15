@@ -1,13 +1,11 @@
-image:
-  - alpine
+image: "alpine:latest"
 
 services:
-  - mariadb:5.6
-  - tutum/wordpress:latest
+  - "mariadb:5.6"
+  - "tutum/wordpress:latest"
 
 before_script:
-  - ping -c1 www.vg.no
+  - "ping -c1 www.vg.no"
 
 test:
-  script:
-    - ping -c1 www.db.no
+  script: "ping -c1 www.db.no"
