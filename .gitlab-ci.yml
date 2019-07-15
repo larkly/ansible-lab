@@ -17,7 +17,8 @@ validate:
 
 deploy:
   stage: "deploy"
-  only: "master"
+  only:
+    - "master"
   script:
   - "apk add ansible"
   - "terraform destroy -auto-approve terraform"
