@@ -13,4 +13,4 @@ test:
 deploy:
   script:
   - "apk add ansible"
-  - "terraform apply -auto-approve terraform"
+  - "terraform destroy -auto-approve terraform"
