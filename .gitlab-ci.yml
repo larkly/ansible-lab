@@ -1,6 +1,6 @@
 image:
-  - name: "hashicorp/terraform"
-  - entrypoint: ["/bin/bash"]
+  name: "hashicorp/terraform"
+  entrypoint: ["/bin/bash"]
 
 test:
   script:
