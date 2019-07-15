@@ -20,4 +20,5 @@ deploy:
     - "master"
   script:
   - "apk add ansible"
-  - "chmod 0600 terraform/aws-kurs && terraform destroy -auto-approve terraform"
+  - "chmod 0600 terraform/aws-kurs"
+  - "terraform apply -auto-approve terraform"
