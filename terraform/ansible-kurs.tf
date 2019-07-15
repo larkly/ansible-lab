@@ -1,3 +1,11 @@
+terraform {
+  backend "s3" {
+    bucket = "bosse-tfstate"
+    key    = "ansible-kurs"
+    region = "eu-central-1"
+  }
+}
+
 provider "aws" {
   version = "~> 2.0"
   region = "eu-central-1"
