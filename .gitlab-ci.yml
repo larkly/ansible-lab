@@ -7,4 +7,5 @@ before_script:
 
 test:
   script:
+  - "pwd"
   - "terraform validate /builds/bosse/ansible-lab/terraform"
