@@ -4,4 +4,4 @@ image:
 
 test:
   script:
-  - "terraform validate /data/terraform"
+  - "terraform validate /builds/bosse/ansible-lab/terraform"
