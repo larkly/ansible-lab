@@ -1,7 +1,7 @@
 image:
   name: "hashicorp/terraform"
-  entrypoint: ["/bin/bash"]
+  #entrypoint: ["/bin/bash"]
 
 test:
   script:
-  - "terraform validate /data/terraform"
+  - "validate /data/terraform"
