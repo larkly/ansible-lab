@@ -5,12 +5,19 @@ image:
 before_script:
   - "terraform init terraform"
 
-test:
+stages:
+  - "validate"
+  - "deploy"
+
+validate:
+  stage: "validate"
   script:
   - "terraform init terraform"
   - "terraform validate terraform"
 
 deploy:
+  stage: "deploy"
+  only: "master"
   script:
   - "apk add ansible"
   - "terraform destroy -auto-approve terraform"
