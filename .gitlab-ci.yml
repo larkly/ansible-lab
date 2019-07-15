@@ -3,6 +3,8 @@ image:
   entrypoint: [""]
 
 before_script:
+  - "yum install -y epel-release"
+  - "yum install -y terraform"
   - "terraform init terraform"
 
 test:
@@ -11,4 +13,5 @@ test:
 
 test:
   script:
+  - "yum install -y ansible"
   - "terraform apply -auto-approve terraform"
