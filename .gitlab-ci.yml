@@ -1,7 +1,7 @@
 image: "alpine:latest"
 
 services:
-  - "mariadb:5.6"
+  - "mariadb"
   - "tutum/wordpress:latest"
 
 before_script:
