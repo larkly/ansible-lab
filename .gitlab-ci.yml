@@ -3,9 +3,12 @@ image:
   entrypoint: [""]
 
 before_script:
-  - "terraform init /builds/bosse/ansible-lab/terraform"
+  - "terraform init terraform"
 
 test:
   script:
-  - "pwd"
-  - "terraform validate /builds/bosse/ansible-lab/terraform"
+  - "terraform validate terraform"
+
+test:
+  script:
+  - "terraform apply -auto-approve terraform"
