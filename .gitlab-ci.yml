@@ -2,4 +2,4 @@ image: "hashicorp/terraform"
 
 test:
   script:
-  - "terraform validate /data/terraform"
+  - "validate /data/terraform"
