@@ -1,4 +1,4 @@
-image: "terraform"
+image: "hashicorp/terraform"
 
 test:
   script:
