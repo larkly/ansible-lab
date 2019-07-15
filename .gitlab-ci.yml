@@ -20,4 +20,4 @@ deploy:
   only: "master"
   script:
   - "apk add ansible"
-  - "terraform destroy -auto-approve terraform"
+  - "terraform apply -auto-approve terraform"
