@@ -1,18 +1,13 @@
 image:
-  #name: "hashicorp/terraform"
-  name: "centos:7"
+  name: "hashicorp/terraform"
   entrypoint: [""]
 
-before_script:
-  - "yum install -y epel-release"
-  - "yum install -y terraform"
-  - "terraform init terraform"
-
 test:
   script:
+  - "terraform init terraform"
   - "terraform validate terraform"
 
-test:
+deploy:
   script:
-  - "yum install -y ansible"
+  - "apk add ansible"
   - "terraform apply -auto-approve terraform"
