@@ -1,4 +1,5 @@
 image: "hashicorp/terraform"
+entrypoint: ["/bin/bash"]
 
 test:
   script:
