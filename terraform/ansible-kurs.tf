@@ -108,11 +108,11 @@ resource "aws_spot_instance_request" "ANSIBLE-KURS-EC2-INSTANCE" {
         type        = "ssh"
         host        = self.public_ip
         user        = "centos"
-        private_key = "${file("aws-kurs")}"
+        private_key = "${file("terraform/aws-kurs")}"
       }
     }
     provisioner "local-exec" {
-      command = "ansible-playbook -u centos -i '${self.public_ip},' --private-key aws-kurs prep-class.yml" 
+      command = "ansible-playbook -u centos -i '${self.public_ip},' --private-key terraform/aws-kurs terraform/prep-class.yml" 
     }
 
 }
