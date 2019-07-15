@@ -12,7 +12,6 @@ stages:
 validate:
   stage: "validate"
   script:
-  - "terraform init terraform"
   - "terraform validate terraform"
 
 deploy:
@@ -21,4 +20,4 @@ deploy:
     - "master"
   script:
   - "apk add ansible"
-  - "terraform destroy -auto-approve terraform"
+  - "chmod 0600 terraform/aws-kurs && terraform destroy -auto-approve terraform"
