@@ -1,5 +1,8 @@
 image: "alpine:latest"
 
+variables:
+  MYSQL_ROOT_PASSWORD: "password"
+
 services:
   - "mariadb"
   - "tutum/wordpress:latest"
