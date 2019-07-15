@@ -79,7 +79,7 @@ resource "aws_key_pair" "ANSIBLE-KURS-KEYPAIR-1" {
 }
 
 resource "aws_spot_instance_request" "ANSIBLE-KURS-EC2-INSTANCE" {
-    count = 20
+    count = 4
     spot_price = 0.05
     wait_for_fulfillment = true
     ami                         = "ami-04cf43aca3e6f3de3"
