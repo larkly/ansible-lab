@@ -1,16 +1,5 @@
-image: "alpine:latest"
-
-variables:
-  MYSQL_ROOT_PASSWORD: "password"
-
-services:
-  - "mariadb"
-  - "tutum/wordpress:latest"
-
-before_script:
-  - "ping -c1 www.vg.no"
+image: "terraform"
 
 test:
   script:
-  - "ping -c1 www.db.no"
-  - "echo $AWS_ACCESS_KEY_ID"
+  - "terraform validate terraform"
