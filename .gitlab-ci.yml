@@ -21,4 +21,4 @@ deploy:
     - "master"
   script:
   - "apk add ansible"
-  - "terraform $TF_ACTION -auto-approve terraform"
+  - "terraform destroy -auto-approve terraform"
