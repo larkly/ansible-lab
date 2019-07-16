@@ -20,3 +20,5 @@ Det er ikke så viktig hvor du legger denne filen. Du vil referere til den sener
 https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html
 
 ## Statisk vs dynamisk inventory
+
+[Start lab](lab/1-inventory.md)
