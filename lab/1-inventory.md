@@ -21,4 +21,4 @@ https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html
 
 ## Statisk vs dynamisk inventory
 
-[Start lab](lab/1-inventory.md)
+[Neste lab](lab/2-playbooks.md)
