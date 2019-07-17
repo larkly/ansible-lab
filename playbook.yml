@@ -1,29 +1,18 @@
-# LAB 2: Playbooks
-En playbook er en samling av ```plays```, som igjen er en samling av ```tasks``` som er nødvendige for å få konfigurert systemet.
-En playbook kan importere andre playbooks, slik at man kan strukturere dem etter oppgavene de skal gjøre.
-
-```
 ---
 hosts: webservers
 become: true
-```
-
-```
 tasks:
+
 - name: Install Apache
   package:
     name: httpd
     state: present
-```
 
-```
 - name: Install PHP
   package:
     name: php
     state: present
-```
 
-```
 - name: Enable services
   service:
     name: httpd
@@ -35,4 +24,3 @@ tasks:
     name: php
     state: started
     enable: true
-```

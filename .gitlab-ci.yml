@@ -2,17 +2,23 @@ image:
   name: "hashicorp/terraform"
   entrypoint: [""]
 
-before_script:
-  - "terraform init terraform"
-
 stages:
   - "validate"
+#  - "markdownlint"
   - "deploy"
 
-validate:
-  stage: "validate"
+terraformvalidate:
+  stage: validate
   script:
+  - "terraform init terraform"
   - "terraform validate terraform"
+
+#markdownlint:
+#  stage: validate
+#  image: pipelinecomponents/markdownlint:latest
+#  allow_failure: true
+#  script:
+#    - mdl --style all --warnings .
 
 deploy:
   stage: "deploy"
@@ -21,5 +27,6 @@ deploy:
   script:
   - "apk add ansible"
   - "chmod 0600 terraform/aws-kurs"
-  - "terraform apply -auto-approve terraform"
-  #- "terraform destroy -auto-approve terraform"
+  - "terraform init terraform"
+  #- "terraform apply -auto-approve terraform"
+  - "terraform destroy -auto-approve terraform"
