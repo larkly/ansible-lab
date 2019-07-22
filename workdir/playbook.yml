@@ -1,0 +1,63 @@
+---
+- hosts: app
+  become: true
+  tasks:
+  - name: apache+php | install
+    package:
+      name: "{{ item }}"
+      state: present
+    with_items:
+    - httpd
+    - php
+  
+  - name: apache+php | service enabled and started
+    service:
+      name: httpd
+      enabled: yes
+      state: started
+
+  - name: apache+php | index.html
+    copy:
+      src: index.php
+      dest: /var/www/html/index.php
+      owner: root
+      group: root
+      mode: 0644
+
+- hosts: proxy
+  become: true
+  tasks:
+  - name: haproxy | install
+    package:
+      name: haproxy
+      state: present
+
+  - name: haproxy | set required sebool for stats
+    seboolean:
+      name: haproxy_connect_any
+      state: yes
+      persistent: yes
+    notify:
+    - haproxy | restarting
+
+  - name: haproxy | service enabled and started
+    service:
+      name: haproxy
+      enabled: yes
+      state: started
+
+  - name: haproxy | configure
+    template:
+      src: haproxy.cfg.j2
+      dest: /etc/haproxy/haproxy.cfg
+      owner: root
+      group: root
+      mode: 0644
+    notify:
+    - haproxy | restarting
+
+  handlers:
+  - name: haproxy | restarting
+    service:
+      name: haproxy
+      state: restarted

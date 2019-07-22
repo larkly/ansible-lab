@@ -1,0 +1,59 @@
+global
+    log         127.0.0.1 local2
+    chroot      /var/lib/haproxy
+    pidfile     /var/run/haproxy.pid
+    maxconn     4000
+    user        haproxy
+    group       haproxy
+    daemon
+    stats socket /var/lib/haproxy/stats
+
+defaults
+    mode                    http
+    log                     global
+    option                  httplog
+    option                  dontlognull
+    option http-server-close
+    option forwardfor       except 127.0.0.0/8
+    option                  redispatch
+    retries                 3
+    timeout http-request    10s
+    timeout queue           1m
+    timeout connect         10s
+    timeout client          1m
+    timeout server          1m
+    timeout http-keep-alive 10s
+    timeout check           10s
+    maxconn                 3000
+
+listen  stats   127.0.0.1:1936
+        mode            http
+        log             global
+        maxconn 10
+        clitimeout      100s
+        srvtimeout      100s
+        contimeout      100s
+        timeout queue   100s
+        stats enable
+        stats hide-version
+        stats refresh 30s
+        stats show-node
+        stats auth admin:{{ secret_variable }}
+        stats uri  /haproxy?stats
+
+frontend  main *:80
+    default_backend             app
+    acl has_stats_uri path_beg -i /haproxy
+    use_backend statsb if has_stats_uri
+
+backend statsb
+    server localhost 127.0.0.1:1936 check
+
+backend app
+    balance     roundrobin
+{% for h in groups['app'] -%}
+{% if h != inventory_hostname %}
+    server {{ h }} {{ hostvars[h]['ansible_default_ipv4']['address'] }}:80 check
+{% endif %}
+{% endfor %}
+
