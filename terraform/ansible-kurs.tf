@@ -70,6 +70,12 @@ resource "aws_security_group" "ANSIBLE-KURS-SG-1" {
         protocol        = "tcp"
         cidr_blocks     = ["0.0.0.0/0"]
     }
+    ingress {
+        from_port       = 5432
+        to_port         = 5432
+        protocol        = "tcp"
+        cidr_blocks     = ["0.0.0.0/0"]
+    }
     egress {
         from_port       = 0
         to_port         = 0
@@ -85,7 +91,7 @@ resource "aws_key_pair" "ANSIBLE-KURS-KEYPAIR-1" {
 }
 
 resource "aws_spot_instance_request" "ANSIBLE-KURS-EC2-INSTANCE" {
-    count = 4
+    count = 64
     spot_price = 0.05
     wait_for_fulfillment = true
     ami                         = "ami-04cf43aca3e6f3de3"

@@ -67,11 +67,12 @@ Her starter vi en ny play, og vi ønsker nå å jobbe med proxy-serveren. Vi ber
       name: haproxy_connect_any
       state: yes
       persistent: yes
+    when: ansible_facts['selinux']['config_mode'] == 'enforcing'
     notify:
     - haproxy | restarting
 ```
 
-For at HAproxy skal kunne serve oss stats-sider, så må vi sette en SELinux boolean. Vi sørger også for at en handler blir eksekvert på slutten av playet, i dette tilfellet en handler som skal restarte HAproxy.
+For at HAproxy skal kunne serve oss stats-sider, så må vi sette en SELinux boolean, men bare når SELinux faktisk er konfigurert (when-conditional basert på facts). Vi sørger også for at en handler blir eksekvert på slutten av playet, i dette tilfellet en handler som skal restarte HAproxy.
 
 ```
   - name: haproxy | service enabled and started

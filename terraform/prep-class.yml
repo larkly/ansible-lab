@@ -5,11 +5,11 @@
 
   - name: Install EPEL and required packages
     yum:
-      name: [epel-release,vim,git,facter]
+      name: [epel-release,vim,git]
       state: present
-  - name: Install Ansible
+  - name: Install Ansible and Facter
     yum:
-      name: ansible
+      name: [ansible,facter]
       state: latest
   - name: StrictHostKeyChecking off
     lineinfile:

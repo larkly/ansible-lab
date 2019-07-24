@@ -62,3 +62,32 @@
     service:
       name: haproxy
       state: restarted
+
+- hosts: all
+  gather_facts: false
+  become: true
+  tasks:
+  - name: preferences.fact | create dir
+    file:
+      path: /etc/ansible/facts.d
+      state: directory
+      mode: '0755'
+  - name: preferences.fact | copy
+    copy:
+      src: preferences.fact
+      dest: /etc/ansible/facts.d/preferences.fact
+      owner: root
+      group: root
+      mode: 0644
+
+- hosts: sql
+  become: true
+  vars:
+    postgresql_databases:
+      - name: some_database
+    postgresql_users:
+      - name: some_user
+        password: secret
+  roles:
+  - geerlingguy.postgresql
+
