@@ -106,3 +106,53 @@ echo '$ANSIBLE_VAULT;1.1;AES256
 33653137336263666365363934313135336430306639643966646637636237646238363264383232
 6434333332336439333535306462666335663266623530343364' | ansible-vault decrypt --vault-id=lab@vault-password-file /dev/stdin --output=/dev/stderr
 ```
+
+## Facts
+Noe av det første Ansible gjør under en playbook run, er at den henter inn informasjon om hostene. Dette er informasjon som vi kan bruke f.eks. med `when` conditionals, slik som vi allerede har satte i playbooken vår i lab 2, hvor vi kun ville sette en SELinux boolean dersom SELinux faktisk var enablet på det systemet. Vi kan også bruke dem i templates, så dette er svært nyttig. Men hvordan vet jeg hva slags facts jeg kan forholde meg til? Dette avhenger litt av hvordan systemet du snakker med er satt opp. Du har noen standardfacts som Ansible finner selv, du kan ha installert noen tredjeparts facts-kilder som `facter` og `ohai`, eller du kan ha laget dine egne facts. I vårt labmiljø er `facter` allerede installert.
+
+*[Facter](https://github.com/puppetlabs/facter) er en frittstående del av Puppet. [Ohai](https://github.com/chef/ohai) er en frittstående del av Chef.*
+
+![oppgave](lab/image/task.png)Ta en nærmere titt på hvilke facts som gjelder for dine systemer ved å orkestrere med setup-modulen i Ansible.
+
+```
+ansible -b -i inventory -m setup proxy
+```
+
+Output er et JSON-dokument som viser de forskjellige facts som du kan treffe beslutninger på i playbooks, templates og andre steder i Ansible, f.eks. der man ønsker å bruke `when:` i en playbook task for bare å trigge oppgaven dersom en viss tilstand gjelder, f.eks. `when: ansible_facts['selinux']['config_mode'] == 'enforcing'` dersom man kun vil kjøre en kommando på systemer som er satt opp for å kjøre SELinux. Dette er ganske likt måten man ville forholde seg til en `dict()` i Python.
+
+### Lokale facts
+Hva om du trenger å ha en spesiell fact som forteller noe om systemet du kjører på? Kanskje du har en spesiell applikasjon som skal rapporterer om tilstand, versjonsnummer og annen informasjon? Du kan legge inn filer i `/etc/ansible/facts.d/` som slutter på `.fact`, og som er enten JSON eller INI. De kan også være eksekverbare, så lenge de returnerer JSON.
+
+La oss lage en slik facts-fil. Vi legger den i `~/ansible/files/preferences.fact`:
+
+```
+[blatti]
+herp=ja
+derp=nei
+```
+
+La oss lage en play nederst i playbooken vår som dytter denne facts-filen ut på alle systemene:
+
+```
+- hosts: all
+  gather_facts: false
+  become: true
+  tasks:
+  - name: preferences.fact | create dir
+    file:
+      path: /etc/ansible/facts.d
+      state: directory
+      mode: '0755'
+  - name: preferences.fact | copy
+    copy:
+      src: preferences.fact
+      dest: /etc/ansible/facts.d/preferences.fact
+      owner: root
+      group: root
+      mode: 0644
+```
+
+Etter at vi har kjørt playbooken vår igjen, la oss sjekke setup-kommanduen vi kjørte i forrige avsnitt igjen. Har vi fått en blatti der? Den vil ligge under `ansible_local`.
+
+* [Eksempelfil](workdir/group_vars/proxy.yml)
+* [Neste lab](lab/5-roles.md)

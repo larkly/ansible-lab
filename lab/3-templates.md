@@ -84,13 +84,5 @@ Vi legger også til noen variabler og template-kommandoer under ```backend app``
 
 Sist vi definerte en fil så brukte vi modulen ```copy```. Her bruker vi modulen ```template```. Den forventer at ```src``` ligger i katalogen ```templates``` under der playbooken kjører (samt et par andre steder). Med ```template``` som modul så blir j2-filen kopiert ut, slik som med ```copy``` men blir deretter også parset gjennom en av Pythons template-engines - [Jinja2](http://jinja.pocoo.org).
 
-![oppgave](lab/image/task.png)Ta en nærmere titt på hvilke facts som gjelder for dine systemer ved å orkestrere med setup-modulen i Ansible.
-
-```
-ansible -b -i inventory -m setup proxy
-```
-
-Output er et JSON-dokument som viser de forskjellige facts som du kan treffe beslutninger på i playbooks, templates og andre steder i Ansible, f.eks. der man ønsker å bruke `when:` i en playbook task for bare å trigge oppgaven dersom en viss tilstand gjelder, f.eks. `when: ansible_facts['selinux']['config_mode'] == 'enforcing'` dersom man kun vil kjøre en kommando på systemer som er satt opp for å kjøre SELinux.
-
 * [Eksempelfil](workdir/templates/haproxy.cfg.j2)
 * [Neste lab](lab/4-variables.md)
