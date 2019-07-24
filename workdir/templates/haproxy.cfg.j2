@@ -38,6 +38,7 @@ listen  stats   127.0.0.1:1936
         stats hide-version
         stats refresh 30s
         stats show-node
+#       stats auth admin:password
         stats auth admin:{{ secret_variable }}
         stats uri  /haproxy?stats
 

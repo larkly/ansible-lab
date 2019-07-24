@@ -37,6 +37,7 @@
       name: haproxy_connect_any
       state: yes
       persistent: yes
+    when: ansible_facts['selinux']['config_mode'] == 'enforcing'
     notify:
     - haproxy | restarting
 
