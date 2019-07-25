@@ -2,7 +2,7 @@
 ## Servere
 Det skal være en liste med servernavn [her](servers.txt). Basert på det nummeret du fikk tildelt, copypaste de fire hostnavnene inn i en egen fil slik at du kan bruke dem i neste oppgave. Velg et av systemene som din Ansible-host, og logg inn på det.
 
-Last ned SSH-nøkkelen til labmiljøet [https://gitlab.klykken.com/bosse/ansible-lab/raw/master/sshkey?inline=false](herfra).
+Last ned SSH-nøkkelen til labmiljøet https://gitlab.klykken.com/bosse/ansible-lab/raw/master/sshkey.
 
 F.eks.
 ```
