@@ -1,3 +1,4 @@
+[Start lab](lab/0-prepare.md)
 # Ansible-lab
 
 ## Provisjonering av labmiljø
