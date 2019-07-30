@@ -24,8 +24,6 @@ ec2-52-57-213-146.eu-central-1.compute.amazonaws.com
 [sql]
 ec2-35-158-94-120.eu-central-1.compute.amazonaws.com
 
-[div]
-ec2-54-93-44-234.eu-central-1.compute.amazonaws.com
 ```
 
 Det er ikke så viktig hvor du legger denne filen, men jeg anbefaler at du legger den i ~/ansible/inventory. Du vil referere til den senere med filnavn, såfremt du ikke legger den på standardlokasjonen ```/etc/ansible/hosts```. Legger du den der vil du kunne droppe ```-i``` parameteret når du senere skal kjøre ```ansible-playbook```. For labbens del forutsettes det at du legger den i katalogen hvor du vanligvis kommer til å kjøre ansible fra, f.eks. ~/ansible/inventory.txt.
@@ -57,7 +55,7 @@ Dette vil kjøre Ansible-modulen ping direkte mot alle enheter i inventory-filen
 ansible -u centos --private-key=/path/to/sshkey -b -i ~/ansible/inventory all -m yum -a 'name=sysstat state=present'
 ```
 
-Prøv å kjør kommandoen på nytt, og se hva som skjer. Prøv også å bytte ut `state=present` med `state=absent`.
+Prøv å kjøre kommandoen på nytt, og se hva som skjer. Prøv også å bytte ut `state=present` med `state=absent`. Tilbakemeldingen du får avhenger av om det er forskjell mellom Ansibles *forventede* og *faktiske* tilstand.
 
 Legg merke til at vi la til `-b` som et parameter her. Det er fordi yum krever at man bruker sudo, og -b tilsvarer become_root som man ville brukt i playbooks, som vi ser på i neste lab.
 

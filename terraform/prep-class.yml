@@ -5,7 +5,7 @@
 
   - name: Install EPEL and required packages
     yum:
-      name: [epel-release,vim,git]
+      name: [epel-release,vim,git,pwgen]
       state: present
   - name: Install Ansible and Facter
     yum:

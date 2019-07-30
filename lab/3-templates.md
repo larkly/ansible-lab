@@ -68,7 +68,7 @@ Endringene i forhold til standardkonfigurasjonen ligger i ```listen stats``` del
 
 Vi legger også til noen variabler og template-kommandoer under ```backend app``` siden vi ønsker å populere dette med de instansene som vi i Ansible inventory har definert som ```[app]```. Generelt sett så blir ```h``` noe vi kan bruke for å få en datatype vi kan bruke for å trekke ut facts, bl.a. IP-adresser. Kaller vi kun på ```h``` så får vi en variabel som inneholder hostnavnet slik det står i inventory, så vi kan bruke den med ```hostvars[h]``` slik at vi kan trekke ut facts om hvert aktuelle system. I dette tilfellet er vi interessert i å få frem IP-adressen på hvert system, og utenfor variabel-klammene definerer vi den statiske informasjonen, slik som at den skal gå mot port 80, og at den skal kjøre en generell helsesjekk.
 
-![oppgave](lab/image/task.png)Vi legger deretter til følgende i playbook.yml *etter* ```haproxy | service enabled and started```:
+![oppgave](lab/image/task.png)Vi legger deretter til følgende i playbook.yml *etter* bolken som omhandler ```haproxy | service enabled and started```:
 
 ```
   - name: haproxy | configure
