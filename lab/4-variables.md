@@ -4,7 +4,7 @@ I den forrige labben så brukte vi variabler fra facts for å fylle ut en templa
 ## Variabel-filer
 I ```templates/haproxy.cfg.j2``` så har vi en stats-side som har admin/password som påloggingsinformasjon. Vi vil gjerne legge inn et skikkelig passord her i stedet. Det vi kan gjøre, er å legge dette inn i en variabelfil under katalogen ```group_vars```. Filnavnene her vil ha navn på grupper som da vil inneholde variabler som vil gjelde for disse. På denne måten kan man legge inn forskjellige typer informasjon som skal gjelde for grupper av systemer. Man vil f.eks. kunne differensiere mellom test og prod gjennom slike variabler, slik at man kan bruke de samme playbookene, modulene og rollene uansett hvilket miljø man kjører opp, men man vil jo som oftest ha forskjellige passord satt i disse miljøene.
 
-Man har også muligheten for å legge filer i ```hosts_var``` hvor filnavnet vil tilsvare hostnavnet. Her vil man kunne overstyre tidligere variabler, bl.a. fra group_vars. Det er en egen liste over hvilken presedens forskjellige typer variabler får [her](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#variable-precedence-where-should-i-put-a-variable). I labben vil vi bare se på group_vars.
+Man har også muligheten for å legge filer i ```hosts_var``` hvor filnavnet vil tilsvare hostnavnet. Her vil man kunne overstyre tidligere variabler, bl.a. fra group_vars. Det er en egen liste over hvilken presedens forskjellige typer variabler får [her](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#variable-precedence-where-should-i-put-a-variable). I denne labben vil vi bare se på group_vars.
 
 ![oppgave](lab/image/task.png)Bruk kommandoen pwgen for å generere et random-ish passord som vi kan bruke for stats.
 
@@ -23,9 +23,9 @@ secret_variable: "W93KU4RJ3iifodHpwVVtTnjiFMs7kepxs9UN4s49NAevEdKRPahkXVMwaouqpz
 Basert på informasjonen her nå, så vil secret_variable være tilgjengelig kun på servere som ligger i inventory-gruppen proxy. Vi kan dermed bruke ```{{ secret_variable }}``` ellers i Ansible-konfigurasjonen. La oss gjøre en liten modifikasjon i ```haproxy.cfg.j2``` filen. På linje 41 vil det stå ```stats auth admin:password```. Bytt dette ut med ```stats auth admin:{{ secret_variable }}```.
 
 ## Vault
-Nå har vi definert et passord for tilgang til stats-siden til HAproxy. Hvis du kjører playbooken nå, så vil variablen bli erstattet med passordet som du genererte. Men siden det er et passord, så vil vi gjerne skjerme denne informasjonen. Det gjør også at når vi kan dele konfigurasjonen vår med andre, som da kan f.eks. sende pull requests for ting de ønsker å gjøre i miljøet ditt, men du vil ikke at de under noen omstendighet skal ha tilgang til hemmelighetene. Da kan du bruke Ansible Vault.
+Nå har vi definert et passord for tilgang til stats-siden til HAproxy. Hvis du kjører playbooken nå, så vil variablen bli erstattet med passordet som du genererte. Men siden det er et passord, så vil vi gjerne skjerme denne informasjonen. Det gjør også at vi kan dele konfigurasjonen vår med andre, som da kan f.eks. sende pull requests for ting de ønsker å gjøre i miljøet ditt, men du vil ikke at de under noen omstendighet skal ha tilgang til hemmelighetene. Da kan du bruke Ansible Vault.
 
-Ansible Vault kan kryptere hele filer eller bare enkeltvariabler. Det mest fleksible alternativet med tanke på rekeying, modifikasjoner o.l. er å kryptere hele fila. Fordelen med å kryptere enkeltvariabler er at man kan ha både krypterte og ukryptert informasjon i dem, og til og med variabler kryptert med forskjellige nøkler avhengig av skjermingsnivå.
+Ansible Vault kan kryptere hele filer eller bare enkeltvariabler. Det mest fleksible alternativet med tanke på rekeying, modifikasjoner o.l. er å kryptere hele fila, mens fordelen med å kryptere enkeltvariabler er at man kan ha både kryptert og ukryptert informasjon i dem, og til og med variabler kryptert med forskjellige nøkler avhengig av skjermingsnivå.
 
 Først må vi ha en passord-fil som vi skal bruke som nøkkel. Det kan også være et passord, men i de fleste tilfeller så er det bedre å kjøre med passord-filer, siden man da kan tilrettelegge for det i CI/CD pipelines uten å måtte ha en passordfrase som miljøvariabel eller tilsvarende. Når vi kjører playbooks manuelt, slik som i labben, så vil en passord-hemmelighet medføre at du må skrive passordet hver eneste gang du skal kjøre playbooken. Da er det bedre å bare henvise til en passordfil. I eksempelet mellom test og prod, så vil man ha forskjellige nøkler som åpner hemmelighetene for henholdsvis test og prod. Når Ansible kjører i testmiljøet, vil det ha tilgang til nøkkelen som åpner testhemmeligheten, og kun den. Ved å bruke vault-id så kan man angi flere nøkler på en playbook-run, f.eks. `--vault-id=prod@secretkey.txt` og `--vault-id=supersecret@supersecretkey.txt`. Monikeren som er nevnt før alfakrøllen vil også være spesifisert i den krypterte strengen, slik at man lett vil kunne se hvilken nøkkel man trenger for å kjøre eller modifisere hemmeligheten.
 
@@ -92,7 +92,7 @@ secret_variable: !vault |
           6434333332336439333535306462666335663266623530343364
 ```
 
-Dette kan man enten cutpaste eller redirecte inn i group_vars/proxy.yml. Man kan dermed ha vanlige og krypterte variables om hverandre, alt etter bruksbehovet.
+Dette kan man enten cutpaste eller redirecte inn i group_vars/proxy.yml. Man kan dermed ha vanlige og krypterte variabler om hverandre, alt etter bruksbehovet.
 
 Når man bruker vault på enkeltvariabler på denne måten, så kan man ikke bruke ```ansible-vault``` parametrene ```edit```, ```view``` og så videre, siden de kommandoene forholder seg kun til helkrypterte filer.
 
@@ -106,6 +106,11 @@ echo '$ANSIBLE_VAULT;1.1;AES256
 33653137336263666365363934313135336430306639643966646637636237646238363264383232
 6434333332336439333535306462666335663266623530343364' | ansible-vault decrypt --vault-id=lab@vault-password-file /dev/stdin --output=/dev/stderr
 ```
+
+### Kjøre Ansible med Vault
+![oppgave](lab/image/task.png)Når du nå har lagt inn vault-filer eller variabler, og skal kjøre enten `ansible` eller `ansible-playbook`, så vil Ansible trenge å vite hvilen nøkkel den skal bruke til å dekryptere innholdet. Legg til parameteret `--vault-id=id@passordfil` slik at den får låst opp hemmeligheten. Du kan gjerne bruke flere `--vault-id` på kommandolinjen dersom du har flere forskjellige nøkler som brukes.
+
+Ansible vil som regel klage over at du har en fullkryptert fil som den ikke får tilgang til, f.eks. under `group_vars`. Dette er fordi Ansible leser alle disse filene i forbindelse med en kjøring. Dersom du har kryptert enkeltvariabler så er det større sjans for at Ansible ikke merker at den er kryptert, siden den mest sannsynlig ikke har noen referanser til den aktuelle variablen.
 
 ## Facts
 Noe av det første Ansible gjør under en playbook run, er at den henter inn informasjon om hostene. Dette er informasjon som vi kan bruke f.eks. med `when` conditionals, slik som vi allerede har satte i playbooken vår i lab 2, hvor vi kun ville sette en SELinux boolean dersom SELinux faktisk var enablet på det systemet. Vi kan også bruke dem i templates, så dette er svært nyttig. Men hvordan vet jeg hva slags facts jeg kan forholde meg til? Dette avhenger litt av hvordan systemet du snakker med er satt opp. Du har noen standardfacts som Ansible finner selv, du kan ha installert noen tredjeparts facts-kilder som `facter` og `ohai`, eller du kan ha laget dine egne facts. I vårt labmiljø er `facter` allerede installert.
@@ -121,9 +126,9 @@ ansible -b -i inventory -m setup proxy
 Output er et JSON-dokument som viser de forskjellige facts som du kan treffe beslutninger på i playbooks, templates og andre steder i Ansible, f.eks. der man ønsker å bruke `when:` i en playbook task for bare å trigge oppgaven dersom en viss tilstand gjelder, f.eks. `when: ansible_facts['selinux']['config_mode'] == 'enforcing'` dersom man kun vil kjøre en kommando på systemer som er satt opp for å kjøre SELinux. Dette er ganske likt måten man ville forholde seg til en `dict()` i Python.
 
 ### Lokale facts
-Hva om du trenger å ha en spesiell fact som forteller noe om systemet du kjører på? Kanskje du har en spesiell applikasjon som skal rapporterer om tilstand, versjonsnummer og annen informasjon? Du kan legge inn filer i `/etc/ansible/facts.d/` som slutter på `.fact`, og som er enten JSON eller INI. De kan også være eksekverbare, så lenge de returnerer JSON.
+Hva om du trenger å ha en spesiell fact som forteller noe om systemet du kjører på? Kanskje du har en spesiell applikasjon som skal rapportere om tilstand, versjonsnummer og annen informasjon? Du kan legge inn filer i `/etc/ansible/facts.d/` som slutter på `.fact`, og som er enten JSON eller INI. De kan også være eksekverbare, så lenge de returnerer JSON.
 
-La oss lage en slik facts-fil. Vi legger den i `~/ansible/files/preferences.fact`:
+![oppgave](lab/image/task.png)La oss lage en slik facts-fil. Vi legger den i `~/ansible/files/preferences.fact`:
 
 ```
 [blatti]

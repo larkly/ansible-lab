@@ -25,7 +25,7 @@ Vi starter YAML-dokumentet vårt med tre streker ```---```. Deretter indikerer v
 
 ![alert](lab/image/alert.png)*Pass på indentering!*
 
-I tasks legger vi inn de oppgavene vi ønsker å gjøre i denne playen. I dette tilfellet ønsker vi å installere både Apache og PHP gjennom det pakkehåndteringssystem som er aktuelt for denne distribusjonen/operativsystemet. I vårt tilfelle er det CentOS 7.6 med yum, men dette håndterer packages-modulen for oss. Det vi må være litt oppmerksomme på er om det er forskjellige navn på pakker i forskjellige distroer/OS. I Debian og Ubuntu heter Apache ```apache``` mens den i RHEL og CentOS heter ```httpd```. Dersom man deployer på tvers av differensierte systemer så må man legge til en ```when``` conditional. Dette kommer vi tilbake til senere.
+I tasks legger vi inn de oppgavene vi ønsker å gjøre i denne playen. I dette tilfellet ønsker vi å installere både Apache og PHP gjennom det pakkehåndteringssystem som er aktuelt for denne distribusjonen/operativsystemet. I vårt tilfelle er det CentOS 7.6 med yum, men dette håndterer package-modulen for oss. Det vi må være litt oppmerksomme på er om det er forskjellige navn på pakker i forskjellige distroer/OS. I Debian og Ubuntu heter Apache ```apache2``` mens den i RHEL og CentOS heter ```httpd```. Dersom man deployer på tvers av differensierte systemer så må man legge til en ```when``` conditional. Dette kommer vi tilbake til senere.
 
 ```
   - name: apache+php | service enabled and started
@@ -35,7 +35,7 @@ I tasks legger vi inn de oppgavene vi ønsker å gjøre i denne playen. I dette 
       state: started
 ```
 
-Etter at en pakke er installert så må vi sørge for at den er startet, og at den starter automatisk ved oppstart. Her det også en hjelpermodul som abstraherer bort ```systemd``` og gjør at vi kun trenger å definere tjenestenavnet. Her gjelder den samme problemstillingen som før dog, ved at vi må legge til conditionals dersom vi har flere distroer eller operativsystem hvor pakkenavnene divergerer.
+Etter at en pakke er installert så må vi sørge for at den er startet, og at den starter automatisk ved oppstart. Her det også en hjelpermodul som abstraherer bort ```systemd``` og gjør at vi kun trenger å definere tjenestenavnet. Her gjelder dog den samme problemstillingen som før, ved at vi må legge til conditionals dersom vi har flere distroer eller operativsystem hvor pakkenavnene divergerer.
 
 ```
   - name: apache+php | index.html
@@ -100,9 +100,9 @@ Her definerer vi handleren som skal sørge for at HAproxy blir restartet når vi
 
 ```
 mkdir ~/ansible/files
+
 echo "<?php
 phpinfo(INFO_VARIABLES);
-
 ?>" | tee ~/ansible/files/index.php
 ```
 

@@ -1,4 +1,4 @@
-# LAB 5: Roled
+# LAB 5: Roles
 Roller hjelper oss med å "modularisere" oppgaver, og baserer seg på en viss struktur av variabelfiler, oppgaver, handlers og slike ting.
 
 En rolle har gjerne denne filstrukturen, i vårt tilfelle under `~/ansible` ser det nogenlunde slik ut nå, pluss roller:
@@ -9,7 +9,7 @@ inventory
 group_vars/
    proxy.yml
 roles/
-   rolename/
+   example/
       tasks/
       handlers/
       files/
@@ -75,7 +75,7 @@ Legg til følgende på slutten av `playbook.yml`:
   - geerlingguy.postgresql
 ```
 
-Kjør Ansible playbooken igjen. Legg merke til at det er en hel del ekstra tasks som nå foregår, som vi ikke har hatt noe forhold til. Man kan gå inn i `~/ansible/roles/postgreql/` for å undersøke nærmere hva denne rollen gjør.
+Kjør Ansible playbooken igjen. Legg merke til at det er en hel del ekstra tasks som nå foregår, som vi ikke har hatt noe forhold til før vi nå tok inn denne rollen. Man kan gå inn i `~/ansible/roles/postgreql/` for å undersøke nærmere hva denne rollen gjør. Man bør passe på hva man importerer når man skal bruke eksterne roller f.eks. i produksjon. I stedet for å referere til en Galaxy-rolle med username.rolename, kan man gi en referanse til et Git-repo, f.eks. lokalt. Dette kan enten være en kopi av en ekstern rolle som har gjennomgått en audit, eller en rolle produsert for intern bruk.
 
 * [Eksempelfil](workdir/playbook.yml)
 * [Neste lab](lab/6-modules.md)
