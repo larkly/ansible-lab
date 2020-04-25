@@ -22,18 +22,4 @@ Når systemene er provisjonert, spytter Terraform ut en liste over systemer. Dis
 
 Ut ifra listen av systemer man blir allokert, velger man én av dem som "master" og logger inn på denne for å gjennomføre oppgavene.
 
-### Ansible install
-### Inventory
-[Inventory lab](lab/1-inventory.md)
-
-### Playbooks
-#### Plays
-#### Tasks
-#### Import
-[Playbooks lab](lab/2-playbooks.md)
-### Roles
-### Modules
-#### Ansible Galaxy
-### Variables
-#### Ansible Vault
-
+[Start lab](lab/0-prepare.md)
